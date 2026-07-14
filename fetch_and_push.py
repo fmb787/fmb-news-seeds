@@ -1,10 +1,10 @@
 import os, time, base64, requests
 from datetime import datetime, timezone, timedelta
 
-GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
-FINNHUB_TOKEN = os.environ["FINNHUB_TOKEN"]
-GITHUB_USER = "fmb787"
-GITHUB_REPO = "fmb-news-seeds"
+GITHUB_TOKEN   = os.environ["GITHUB_TOKEN"]
+JBLANKED_TOKEN = os.environ["JBLANKED_TOKEN"]
+GITHUB_USER    = "fmb787"
+GITHUB_REPO    = "fmb-news-seeds"
 
 DB = {
     "non-farm":      ("positive", "actual_high=USD_up/actual_low=USD_down"),
@@ -29,7 +29,6 @@ DB = {
     "housing":       ("positive", "actual_high=USD_up/actual_low=USD_down"),
     "building":      ("positive", "actual_high=USD_up/actual_low=USD_down"),
     "existing home": ("positive", "actual_high=USD_up/actual_low=USD_down"),
-    "pcе":           ("positive", "actual_high=USD_up/actual_low=USD_down"),
     "pce":           ("positive", "actual_high=USD_up/actual_low=USD_down"),
 }
 
@@ -41,27 +40,30 @@ def get_dir(name):
     return ("unknown", "watch_price_action")
 
 def fetch():
-    now = datetime.utcnow()
-    date_from = (now - timedelta(days=1)).strftime("%Y-%m-%d")
-    date_to   = (now + timedelta(days=7)).strftime("%Y-%m-%d")
-    url = "https://finnhub.io/api/v1/calendar/economic"
-    params = {
-        "from":  date_from,
-        "to":    date_to,
-        "token": FINNHUB_TOKEN
+    url = "https://www.jblanked.com/news/api/public/calendar/today/"
+    hdrs = {
+        "Authorization": "Api-Key " + JBLANKED_TOKEN,
+        "Content-Type": "application/json"
     }
     try:
-        r = requests.get(url, params=params, timeout=15)
-        print("Finnhub status: " + str(r.status_code))
+        r = requests.get(url, headers=hdrs, timeout=15)
+        print("JBlanked status: " + str(r.status_code))
         if r.status_code == 200:
             data = r.json()
-            events = data.get("economicCalendar", [])
-            print(str(len(events)) + " events from Finnhub")
-            return events
+            print("type: " + str(type(data)))
+            if isinstance(data, list):
+                print(str(len(data)) + " events")
+                return data
+            elif isinstance(data, dict):
+                for key in ("results", "data", "events", "calendar"):
+                    if key in data:
+                        print(str(len(data[key])) + " events in '" + key + "'")
+                        return data[key]
+                print("keys: " + str(list(data.keys())))
         else:
             print("Response: " + r.text[:300])
     except Exception as e:
-        print("Finnhub error: " + str(e))
+        print("JBlanked error: " + str(e))
     return []
 
 def to_pine(events):
@@ -69,29 +71,16 @@ def to_pine(events):
     seen = set()
     for ev in events:
         try:
-            name   = str(ev.get("event",    "")).strip().replace("|", "")
-            cur    = str(ev.get("unit",     "")).strip()
-            ds     = str(ev.get("time",     "")).strip()
+            # JBlanked fields
+            name   = str(ev.get("name",     ev.get("event",    ""))).strip().replace("|", "")
+            cur    = str(ev.get("currency", ev.get("cur",      ""))).strip().upper()
+            ds     = str(ev.get("date",     ev.get("time",     ev.get("datetime", "")))).strip()
             actual = str(ev.get("actual",   "")).strip().replace("|", "")
-            fore   = str(ev.get("estimate", "")).strip().replace("|", "")
-            prev   = str(ev.get("prev",     "")).strip().replace("|", "")
-            impact = str(ev.get("impact",   "low")).strip().lower()
-            country= str(ev.get("country",  "")).strip()
+            fore   = str(ev.get("forecast", ev.get("estimate", ""))).strip().replace("|", "")
+            prev   = str(ev.get("previous", ev.get("prev",     ""))).strip().replace("|", "")
+            impact = str(ev.get("impact",   ev.get("strength", "low"))).strip().lower()
 
-            if not name or not ds:
-                continue
-
-            # استخراج العملة من اسم الدولة
-            country_currency = {
-                "united states": "USD", "euro area": "EUR", "european union": "EUR",
-                "germany": "EUR", "france": "EUR", "italy": "EUR", "spain": "EUR",
-                "united kingdom": "GBP", "japan": "JPY", "canada": "CAD",
-                "australia": "AUD", "new zealand": "NZD", "switzerland": "CHF",
-                "china": "CNY", "norway": "NOK", "sweden": "SEK",
-            }
-            if not cur or len(cur) != 3:
-                cur = country_currency.get(country.lower(), "")
-            if not cur:
+            if not name or not cur or not ds:
                 continue
 
             # تحويل الوقت
