@@ -1,1 +1,42 @@
-init
+Core Machinery Orders m/m|1784083800|JPY|low|unknown|watch_price_action|0.0|-4.2|8.7
+API Weekly Statistical Bulletin|1784071800|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+BOE Gov Bailey Speaks|1784070000|GBP|high|unknown|watch_price_action|0.0|0.0|0.0
+TIC Long-Term Purchases|1784070000|USD|low|unknown|watch_price_action|232.7|128.5|104.8
+FOMC Member Bowman Speaks|1784066100|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+FOMC Member Goolsbee Speaks|1784059200|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+FOMC Member Barr Speaks|1784058000|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+CB Leading Index m/m|1784050200|AUD|low|unknown|watch_price_action|0.2|0.0|0.3
+Fed Chairman Warsh Testifies|1784048400|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+CB Leading Index m/m|1784046600|GBP|low|unknown|watch_price_action|-0.5|0.0|-0.3
+Core CPI m/m|1784043000|USD|high|positive|actual_high=USD_up/actual_low=USD_down|0.0|0.2|0.2
+Core CPI y/y|1784043000|USD|high|positive|actual_high=USD_up/actual_low=USD_down|2.6|2.8|2.9
+CPI m/m|1784043000|USD|high|positive|actual_high=USD_up/actual_low=USD_down|-0.4|-0.1|0.5
+CPI y/y|1784043000|USD|high|positive|actual_high=USD_up/actual_low=USD_down|3.5|3.8|4.2
+ADP Weekly Employment Change|1784042100|USD|low|positive|actual_high=USD_up/actual_low=USD_down|19.8|0.0|21.0
+NFIB Small Business Index|1784034000|USD|low|unknown|watch_price_action|97.4|95.8|95.3
+BOE Gov Bailey Speaks|1784029500|GBP|high|unknown|watch_price_action|0.0|0.0|0.0
+PPI m/m|1784021400|CHF|high|positive|actual_high=USD_up/actual_low=USD_down|-0.3|-0.5|-0.4
+German WPI m/m|1784019600|EUR|low|unknown|watch_price_action|-0.7|0.5|-0.6
+Revised Industrial Production m/m|1784014200|JPY|low|unknown|watch_price_action|0.1|0.5|0.5
+Revised Industrial Production m/m|1784010600|JPY|low|unknown|watch_price_action|0.0|0.5|0.5
+NAB Business Confidence|1784003400|AUD|low|unknown|watch_price_action|0.0|0.0|-14.0
+Westpac Consumer Sentiment|1783999800|AUD|low|positive|actual_high=USD_up/actual_low=USD_down|0.0|0.0|-2.9
+NAB Business Confidence|1783999800|AUD|low|unknown|watch_price_action|-5.0|0.0|-14.0
+Westpac Consumer Sentiment|1783996200|AUD|low|positive|actual_high=USD_up/actual_low=USD_down|4.1|0.0|-2.9
+BRC Retail Sales Monitor y/y|1783994460|GBP|low|positive|actual_high=cur_up/actual_low=cur_down|1.7|2.6|3.4
+Visitor Arrivals m/m|1783993500|NZD|low|unknown|watch_price_action|-2.4|0.0|1.8
+BRC Retail Sales Monitor y/y|1783990860|GBP|low|positive|actual_high=cur_up/actual_low=cur_down|1.7|2.6|3.4
+NZIER Business Confidence|1783990800|NZD|low|unknown|watch_price_action|8.0|0.0|-4.0
+Visitor Arrivals m/m|1783989900|NZD|low|unknown|watch_price_action|-2.4|0.0|1.8
+NZIER Business Confidence|1783987200|NZD|low|unknown|watch_price_action|8.0|0.0|-4.0
+French Bank Holiday|1783987200|EUR|low|unknown|watch_price_action|0.0|0.0|0.0
+MPC Member Pill Speaks|1783976400|GBP|low|unknown|watch_price_action|0.0|0.0|0.0
+Federal Budget Balance|1783976400|USD|low|unknown|watch_price_action|-120.3|-135.8|-292.6
+Federal Budget Balance|1783976340|USD|low|unknown|watch_price_action|-120.3|-135.8|-292.6
+MPC Member Pill Speaks|1783972800|GBP|low|unknown|watch_price_action|0.0|0.0|0.0
+Federal Budget Balance|1783972740|USD|low|unknown|watch_price_action|-120.3|-135.8|-292.6
+FOMC Member Waller Speaks|1783971000|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+FOMC Member Waller Speaks|1783967400|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+FOMC Member Bowman Speaks|1783945500|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+FOMC Member Bowman Speaks|1783941900|USD|low|unknown|watch_price_action|0.0|0.0|0.0
+BusinessNZ Services Index|1783906200|NZD|low|unknown|watch_price_action|50.6|0.0|48.0
