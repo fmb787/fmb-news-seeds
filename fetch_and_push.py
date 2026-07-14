@@ -1,5 +1,5 @@
 import os, time, base64, requests
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 GITHUB_TOKEN   = os.environ["GITHUB_TOKEN"]
 JBLANKED_TOKEN = os.environ["JBLANKED_TOKEN"]
@@ -40,7 +40,7 @@ def get_dir(name):
     return ("unknown", "watch_price_action")
 
 def fetch():
-    url = "https://www.jblanked.com/news/api/public/calendar/today/"
+    url = "https://www.jblanked.com/news/api/forex-factory/calendar/week/"
     hdrs = {
         "Authorization": "Api-Key " + JBLANKED_TOKEN,
         "Content-Type": "application/json"
@@ -50,20 +50,15 @@ def fetch():
         print("JBlanked status: " + str(r.status_code))
         if r.status_code == 200:
             data = r.json()
-            print("type: " + str(type(data)))
             if isinstance(data, list):
                 print(str(len(data)) + " events")
                 return data
-            elif isinstance(data, dict):
-                for key in ("results", "data", "events", "calendar"):
-                    if key in data:
-                        print(str(len(data[key])) + " events in '" + key + "'")
-                        return data[key]
-                print("keys: " + str(list(data.keys())))
+            print("unexpected format: " + str(type(data)))
+            print(str(data)[:300])
         else:
-            print("Response: " + r.text[:300])
+            print("error: " + r.text[:300])
     except Exception as e:
-        print("JBlanked error: " + str(e))
+        print("error: " + str(e))
     return []
 
 def to_pine(events):
@@ -71,28 +66,28 @@ def to_pine(events):
     seen = set()
     for ev in events:
         try:
-            # JBlanked fields
-            name   = str(ev.get("name",     ev.get("event",    ""))).strip().replace("|", "")
-            cur    = str(ev.get("currency", ev.get("cur",      ""))).strip().upper()
-            ds     = str(ev.get("date",     ev.get("time",     ev.get("datetime", "")))).strip()
-            actual = str(ev.get("actual",   "")).strip().replace("|", "")
-            fore   = str(ev.get("forecast", ev.get("estimate", ""))).strip().replace("|", "")
-            prev   = str(ev.get("previous", ev.get("prev",     ""))).strip().replace("|", "")
-            impact = str(ev.get("impact",   ev.get("strength", "low"))).strip().lower()
+            name   = str(ev.get("Name",     "")).strip().replace("|", "")
+            cur    = str(ev.get("Currency", "")).strip().upper()
+            ds     = str(ev.get("Date",     "")).strip()
+            actual = str(ev.get("Actual",   "")).strip().replace("|", "")
+            fore   = str(ev.get("Forecast", "")).strip().replace("|", "")
+            prev   = str(ev.get("Previous", "")).strip().replace("|", "")
+            impact = str(ev.get("Impact",   "Low")).strip().lower()
 
             if not name or not cur or not ds:
                 continue
 
-            # تحويل الوقت
+            # تحويل التاريخ — صيغة JBlanked: "2024.02.08 15:30:00"
             try:
-                ds_clean = ds.replace("Z", "").replace("T", " ")
-                if "." in ds_clean:
-                    ds_clean = ds_clean[:ds_clean.index(".")]
+                ds_clean = ds.replace(".", "-", 2)
                 dt = datetime.strptime(ds_clean, "%Y-%m-%d %H:%M:%S")
                 ts = int(dt.replace(tzinfo=timezone.utc).timestamp())
             except:
                 try:
-                    dt = datetime.strptime(ds[:10], "%Y-%m-%d")
+                    ds_clean = ds.replace("Z","").replace("T"," ")
+                    if "." in ds_clean:
+                        ds_clean = ds_clean[:ds_clean.index(".")]
+                    dt = datetime.strptime(ds_clean, "%Y-%m-%d %H:%M:%S")
                     ts = int(dt.replace(tzinfo=timezone.utc).timestamp())
                 except:
                     continue
